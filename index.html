@@ -1,33 +1,626 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Learning</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-image: url('Hpying _background2.png');
-            background-size: cover;
-            background-position: center;
-        }
-        .container {
-            background: rgba(255, 255, 255, 0.8);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🌳 My Language Growth Garden</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap" rel="stylesheet" />
+  <style>
+    /* ── Reset & Base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --brown:   #5d4037;
+      --green:   #4caf50;
+      --green-d: #388e3c;
+      --sky:     #b3e5fc;
+      --cream:   #fffde7;
+      --gold:    #f9a825;
+      --red:     #e53935;
+      --shadow:  rgba(93,64,55,0.18);
+      --panel-bg: rgba(255,253,231,0.97);
+      --radius:  18px;
+    }
+
+    body {
+      font-family: 'Nunito', sans-serif;
+      background: linear-gradient(160deg, #e8f5e9 0%, #fffde7 60%, #e1f5fe 100%);
+      min-height: 100vh;
+      color: #3e2723;
+    }
+
+    /* ── Layout ── */
+    .app-wrapper {
+      display: flex;
+      gap: 24px;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px 20px 40px;
+    }
+
+    /* ── Sidebar ── */
+    .sidebar {
+      width: 270px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel {
+      background: var(--panel-bg);
+      border: 3px solid var(--brown);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 4px 6px 0 var(--shadow);
+    }
+
+    .panel h2 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.3rem;
+      color: var(--brown);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: var(--brown);
+      margin-bottom: 5px;
+    }
+
+    select, input[type="number"] {
+      width: 100%;
+      padding: 10px 12px;
+      border: 2.5px solid var(--brown);
+      border-radius: 10px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      background: #fff;
+      color: #3e2723;
+      margin-bottom: 14px;
+      outline: none;
+      transition: border-color .2s;
+    }
+    select:focus, input[type="number"]:focus { border-color: var(--green); }
+
+    .btn-plant {
+      width: 100%;
+      padding: 13px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 4px 0 var(--green-d);
+      transition: transform .1s, box-shadow .1s;
+    }
+    .btn-plant:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--green-d); }
+    .btn-plant:hover  { background: #43a047; }
+
+    .success-msg {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: #e8f5e9;
+      border: 2px solid var(--green);
+      border-radius: 10px;
+      font-weight: 700;
+      color: var(--green-d);
+      font-size: 0.9rem;
+      display: none;
+      animation: popIn .3s ease;
+    }
+
+    /* ── Metrics ── */
+    .metrics {
+      display: flex;
+      gap: 12px;
+    }
+    .metric-card {
+      flex: 1;
+      background: var(--panel-bg);
+      border: 3px solid var(--brown);
+      border-radius: var(--radius);
+      padding: 14px 12px;
+      text-align: center;
+      box-shadow: 3px 4px 0 var(--shadow);
+    }
+    .metric-card .metric-label {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--brown);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .metric-card .metric-value {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.6rem;
+      color: var(--green-d);
+      margin-top: 4px;
+    }
+    .metric-card .metric-unit {
+      font-size: 0.75rem;
+      color: #795548;
+      font-weight: 700;
+    }
+
+    /* ── Main Area ── */
+    .main {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* ── Title ── */
+    .app-title {
+      font-family: 'Fredoka One', cursive;
+      font-size: 2rem;
+      color: var(--brown);
+      text-shadow: 2px 2px 0 rgba(255,255,255,.6);
+      letter-spacing: .02em;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* ── Garden ── */
+    .garden-wrapper {
+      background: var(--panel-bg);
+      border: 4px solid var(--brown);
+      border-radius: var(--radius);
+      padding: 10px;
+      box-shadow: 5px 7px 0 var(--shadow);
+    }
+
+    .garden-container {
+      background-image: url('Hpylng _background2.png');
+      background-size: cover;
+      background-position: center bottom;
+      height: 560px;
+      border-radius: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .emoji-item {
+      position: absolute;
+      font-size: 44px;
+      transform: translate(-50%, -50%);
+      filter: drop-shadow(2px 3px 2px rgba(0,0,0,.35));
+      cursor: default;
+      transition: transform .2s ease;
+      line-height: 1;
+    }
+    .emoji-item:hover {
+      transform: translate(-50%, -50%) scale(1.2);
+      filter: drop-shadow(3px 4px 4px rgba(0,0,0,.4));
+    }
+
+    .emoji-item .tooltip {
+      display: none;
+      position: absolute;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(62,39,35,.9);
+      color: #fff;
+      font-size: 11px;
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .emoji-item:hover .tooltip { display: block; }
+
+    /* ── Table ── */
+    .table-section h3 {
+      font-family: 'Fredoka One', cursive;
+      font-size: 1.2rem;
+      color: var(--brown);
+      margin-bottom: 10px;
+    }
+
+    .info-box {
+      background: #e3f2fd;
+      border: 2px solid #90caf9;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1565c0;
+      margin-bottom: 12px;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+      border: 3px solid var(--brown);
+      border-radius: var(--radius);
+      box-shadow: 3px 4px 0 var(--shadow);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--panel-bg);
+      font-size: 0.9rem;
+    }
+    thead th {
+      background: var(--brown);
+      color: #fff;
+      font-family: 'Fredoka One', cursive;
+      font-size: 0.95rem;
+      padding: 12px 14px;
+      text-align: left;
+    }
+    thead th:first-child { border-radius: 12px 0 0 0; }
+    thead th:last-child  { border-radius: 0 12px 0 0; }
+
+    tbody tr { border-bottom: 1.5px solid #d7ccc8; transition: background .15s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #fff8e1; }
+
+    tbody td {
+      padding: 10px 14px;
+      vertical-align: middle;
+    }
+
+    td input[type="number"] {
+      width: 80px;
+      padding: 5px 8px;
+      margin-bottom: 0;
+      font-size: 0.9rem;
+    }
+
+    .btn-delete {
+      background: #ffebee;
+      border: 2px solid var(--red);
+      color: var(--red);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: background .15s;
+    }
+    .btn-delete:hover { background: var(--red); color: #fff; }
+
+    .btn-save-row {
+      background: #e8f5e9;
+      border: 2px solid var(--green);
+      color: var(--green-d);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-left: 6px;
+      transition: background .15s;
+    }
+    .btn-save-row:hover { background: var(--green); color: #fff; }
+
+    /* ── Animations ── */
+    @keyframes popIn {
+      from { transform: scale(.8); opacity: 0; }
+      to   { transform: scale(1);  opacity: 1; }
+    }
+    @keyframes floatIn {
+      from { transform: translate(-50%, -50%) scale(0) rotate(-20deg); opacity: 0; }
+      to   { transform: translate(-50%, -50%) scale(1) rotate(0deg);   opacity: 1; }
+    }
+    .emoji-item.new-item { animation: floatIn .5s cubic-bezier(.34,1.56,.64,1) forwards; }
+
+    /* ── Balloons ── */
+    .balloon-container {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9999;
+      overflow: hidden;
+    }
+    .balloon {
+      position: absolute;
+      bottom: -80px;
+      font-size: 40px;
+      animation: riseUp 2.8s ease-in forwards;
+    }
+    @keyframes riseUp {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+      80%  { opacity: 1; }
+      100% { transform: translateY(-110vh) rotate(15deg); opacity: 0; }
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 700px) {
+      .app-wrapper { flex-direction: column; }
+      .sidebar { width: 100%; }
+      .metrics { flex-direction: row; }
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Welcome to Happy Learning</h1>
-        <p>This is rizukit.github.io</p>
+
+<div class="balloon-container" id="balloonContainer"></div>
+
+<div class="app-wrapper">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar">
+    <div class="panel">
+      <h2>🌱 Log Your Progress</h2>
+      <label for="langSelect">Language</label>
+      <select id="langSelect">
+        <option value="English">🇬🇧 English</option>
+        <option value="German">🇩🇪 German</option>
+      </select>
+
+      <label for="minutesInput">Speaking Time (min)</label>
+      <input type="number" id="minutesInput" min="1" value="30" />
+
+      <button class="btn-plant" onclick="plantEntry()">🌿 Plant in Garden</button>
+      <div class="success-msg" id="successMsg">🎉 Wonderful!!</div>
     </div>
+
+    <!-- Legend -->
+    <div class="panel">
+      <h2>📖 Legend</h2>
+      <div style="font-size:0.83rem; line-height:1.9; color:#5d4037;">
+        <div>🌻🌷🌹🌺🌸🌼 — Plants</div>
+        <div>🌽🥕🍓🍎🥦🍅🍄🍀 — Veggies</div>
+        <div>🦋🐝🐥🪿🦊🦌🐿️ — Animals</div>
+        <div style="margin-top:8px; font-size:0.78rem; color:#795548;">Hover an emoji to see details!</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ── Main ── -->
+  <main class="main">
+    <h1 class="app-title">🌳 My Language Growth Garden 🌳</h1>
+
+    <!-- Metrics -->
+    <div class="metrics">
+      <div class="metric-card">
+        <div class="metric-label">🇬🇧 English Total</div>
+        <div class="metric-value" id="engTotal">0</div>
+        <div class="metric-unit">minutes</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">🇩🇪 German Total</div>
+        <div class="metric-value" id="gerTotal">0</div>
+        <div class="metric-unit">minutes</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-label">🌱 Total Sessions</div>
+        <div class="metric-value" id="totalSessions">0</div>
+        <div class="metric-unit">planted</div>
+      </div>
+    </div>
+
+    <!-- Garden -->
+    <div class="garden-wrapper">
+      <div class="garden-container" id="gardenContainer">
+        <!-- Emojis injected here -->
+      </div>
+    </div>
+
+    <!-- Table -->
+    <div class="table-section panel">
+      <h3>📋 Manage Your Achievements</h3>
+      <div class="info-box">💡 Edit minutes directly in the table, or delete a row to remove it from your garden.</div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Icon</th>
+              <th>Date</th>
+              <th>Language</th>
+              <th>Minutes</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // ── Data ──────────────────────────────────────────────────────
+  const PLANTS  = ["🌻","🌷","🌹","🌺","🌸","🌼","🌽","🥕","🍓","🍎","🥦","🍅","🍄","🍀"];
+  const ANIMALS = ["🦋","🐝","🐥","🪿","🦊","🦌","🐿️","🦄","🦥","🐣","🦕","🦓","🐕","🦩","🦜"];
+
+  // Gnome zones to avoid (% of garden width/height)
+  const GNOME_ZONES = [
+    { x: [10, 32], y: [72, 100] },  // left gnome
+    { x: [46, 86], y: [63, 95] },   // right gnomes
+  ];
+
+  function loadData() {
+    try { return JSON.parse(localStorage.getItem('gardenData') || '[]'); }
+    catch { return []; }
+  }
+
+  function saveData(data) {
+    localStorage.setItem('gardenData', JSON.stringify(data));
+  }
+
+  function randomChoice(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  function pickIcon() {
+    return Math.random() > 0.8 ? randomChoice(ANIMALS) : randomChoice(PLANTS);
+  }
+
+  function hitsGnome(x, y) {
+    return GNOME_ZONES.some(z => x >= z.x[0] && x <= z.x[1] && y >= z.y[0] && y <= z.y[1]);
+  }
+
+  function hitsExisting(x, y, data, skipId = null) {
+    const MIN_DIST = 8;
+    return data.some(d => {
+      if (d.id === skipId) return false;
+      const dx = x - d.posX, dy = y - d.posY;
+      return Math.sqrt(dx*dx + dy*dy) < MIN_DIST;
+    });
+  }
+
+  function findPosition(data) {
+    for (let i = 0; i < 150; i++) {
+      const x = Math.random() * 86 + 5;   // 5–91%
+      const y = Math.random() * 22 + 62;  // 62–84%
+      if (!hitsGnome(x, y) && !hitsExisting(x, y, data)) {
+        return { x: parseFloat(x.toFixed(2)), y: parseFloat(y.toFixed(2)) };
+      }
+    }
+    // Fallback: expand search range
+    for (let i = 0; i < 50; i++) {
+      const x = Math.random() * 86 + 5;
+      const y = Math.random() * 30 + 58;
+      if (!hitsGnome(x, y)) return { x: parseFloat(x.toFixed(2)), y: parseFloat(y.toFixed(2)) };
+    }
+    return { x: 50, y: 75 };
+  }
+
+  function todayStr() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  // ── Rendering ────────────────────────────────────────────────
+  function renderGarden(newId = null) {
+    const data = loadData();
+    const container = document.getElementById('gardenContainer');
+    container.innerHTML = '';
+
+    data.forEach(entry => {
+      const el = document.createElement('div');
+      el.className = 'emoji-item' + (entry.id === newId ? ' new-item' : '');
+      el.style.left = entry.posX + '%';
+      el.style.top  = entry.posY + '%';
+      el.innerHTML = `${entry.icon}<span class="tooltip">${entry.language} · ${entry.minutes} min · ${entry.date}</span>`;
+      container.appendChild(el);
+    });
+  }
+
+  function renderMetrics() {
+    const data = loadData();
+    const engMin = data.filter(d => d.language === 'English').reduce((s, d) => s + Number(d.minutes), 0);
+    const gerMin = data.filter(d => d.language === 'German' ).reduce((s, d) => s + Number(d.minutes), 0);
+    document.getElementById('engTotal').textContent     = engMin;
+    document.getElementById('gerTotal').textContent     = gerMin;
+    document.getElementById('totalSessions').textContent = data.length;
+  }
+
+  function renderTable() {
+    const data = loadData();
+    const tbody = document.getElementById('tableBody');
+    tbody.innerHTML = '';
+
+    if (data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:20px;color:#a1887f;font-weight:700;">No entries yet — plant something! 🌱</td></tr>';
+      return;
+    }
+
+    data.slice().reverse().forEach(entry => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="font-size:1.6rem;line-height:1;">${entry.icon}</td>
+        <td>${entry.date}</td>
+        <td>${entry.language === 'English' ? '🇬🇧' : '🇩🇪'} ${entry.language}</td>
+        <td>
+          <input type="number" min="1" value="${entry.minutes}"
+            id="min-${entry.id}" style="width:80px;" />
+        </td>
+        <td>
+          <button class="btn-save-row" onclick="saveRow('${entry.id}')">💾 Save</button>
+          <button class="btn-delete"   onclick="deleteRow('${entry.id}')">🗑 Delete</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+  }
+
+  function renderAll(newId = null) {
+    renderGarden(newId);
+    renderMetrics();
+    renderTable();
+  }
+
+  // ── Actions ──────────────────────────────────────────────────
+  function plantEntry() {
+    const lang = document.getElementById('langSelect').value;
+    const mins = parseInt(document.getElementById('minutesInput').value);
+    if (!mins || mins < 1) { alert('Please enter at least 1 minute!'); return; }
+
+    const data = loadData();
+    const pos  = findPosition(data);
+    const entry = {
+      id:       Date.now().toString(),
+      date:     todayStr(),
+      language: lang,
+      minutes:  mins,
+      icon:     pickIcon(),
+      posX:     pos.x,
+      posY:     pos.y,
+    };
+    data.push(entry);
+    saveData(data);
+
+    renderAll(entry.id);
+    showSuccess();
+    launchBalloons();
+  }
+
+  function saveRow(id) {
+    const data = loadData();
+    const input = document.getElementById('min-' + id);
+    if (!input) return;
+    const newMins = parseInt(input.value);
+    if (!newMins || newMins < 1) { alert('Minutes must be at least 1.'); return; }
+    const idx = data.findIndex(d => d.id === id);
+    if (idx !== -1) { data[idx].minutes = newMins; saveData(data); }
+    renderAll();
+  }
+
+  function deleteRow(id) {
+    if (!confirm('Remove this entry from your garden?')) return;
+    const data = loadData().filter(d => d.id !== id);
+    saveData(data);
+    renderAll();
+  }
+
+  // ── UI Helpers ────────────────────────────────────────────────
+  function showSuccess() {
+    const msg = document.getElementById('successMsg');
+    msg.style.display = 'block';
+    setTimeout(() => { msg.style.display = 'none'; }, 2500);
+  }
+
+  function launchBalloons() {
+    const container = document.getElementById('balloonContainer');
+    const balloons = ['🎈','🎉','🎊','🌟','✨','🎈','🎈'];
+    balloons.forEach((b, i) => {
+      const el = document.createElement('div');
+      el.className = 'balloon';
+      el.textContent = b;
+      el.style.left  = (10 + Math.random() * 80) + '%';
+      el.style.animationDelay = (i * 0.18) + 's';
+      container.appendChild(el);
+      setTimeout(() => el.remove(), 3200);
+    });
+  }
+
+  // ── Init ─────────────────────────────────────────────────────
+  renderAll();
+</script>
 </body>
 </html>
